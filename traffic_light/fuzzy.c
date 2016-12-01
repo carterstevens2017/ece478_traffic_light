@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
 
 //double defuzzify(double degreeoftruth[6]);
 double defuzzify(double* degreeoftruth);
@@ -8,10 +10,13 @@ double max(double raphael, double michaelangelo, double leonardo, double donatel
 double* getDoT(int waiting, int through);
 
 int main(void){
+  srand(time(NULL));
   int i;
   double degree[6];
   double* DoT;
   double result;
+  int waiting = rand() % 101;
+  int through = rand() % 101;
 
   degree[0] = .33;
   degree[1] = .67;
@@ -19,7 +24,10 @@ int main(void){
   degree[3] = .33;
   degree[4] = .67;
   degree[5] = 0;
-  DoT = getDoT(0, 81);
+
+  printf("Waiting: %d\nThrough: %d\n", waiting, through);
+
+  DoT = getDoT(waiting, through);
   for (i = 0; i < 6; i++)
   {
 	printf( "Degree of truth %d: %lf\n", i, *(DoT + i));
@@ -75,25 +83,25 @@ double* getDoT(int waiting, int through)
 	
 	/*Gets degrees of truth for cars stopped
 	  at red light */
-	if(waiting < 20) 
+	if(waiting <= 20) 
 	{
 		DoT[0] = 1;
 		DoT[1] = 0;
 		DoT[2] = 0;
 	}
-	else if(waiting > 20 && waiting < 40)
+	else if(waiting > 20 && waiting <= 40)
 	{
 		DoT[0] = (40 - waiting) * .05;
 		DoT[1] = (waiting - 20) * .05;
 		DoT[2] = 0;
 	}
-	else if(waiting > 40 && waiting < 60)
+	else if(waiting > 40 && waiting <= 60)
 	{
 		DoT[0] = 0;
 		DoT[1] = 1;
 		DoT[2] = 0;
 	}
-	else if(waiting > 60 && waiting < 80)
+	else if(waiting > 60 && waiting <= 80)
 	{
 		DoT[0] = 0;
 		DoT[1] = (80 - waiting) * .05;
@@ -108,25 +116,25 @@ double* getDoT(int waiting, int through)
 
 	/*Gets degrees of truth for cars going through
 	  gree light */
-	if(through < 20)
+	if(through <= 20)
 	{
 		DoT[3] = 1; 
 		DoT[4] = 0;
 		DoT[5] = 0;
 	}
-	if(through > 20 && through < 40)
+	if(through > 20 && through <= 40)
 	{
 		DoT[3] = (40 - through) * .05;
 		DoT[4] = (through - 20) * .05;
 		DoT[5] = 0;
 	}
-	if(through > 40 && through < 60)
+	if(through > 40 && through <= 60)
 	{
 		DoT[3] = 0;
 		DoT[4] = 1;
 		DoT[5] = 0;
 	}
-	if(through > 60 && through < 80)
+	if(through > 60 && through <= 80)
 	{
 		DoT[3] = 0;
 		DoT[4] = (80 - through) * .05;
