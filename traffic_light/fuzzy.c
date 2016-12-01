@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-double defuzzify(double degreeoftruth[6]);
+//double defuzzify(double degreeoftruth[6]);
+double defuzzify(double* degreeoftruth);
 double min(double x, double y);
 double max(double raphael, double michaelangelo, double leonardo, double donatello);
 double* getDoT(int waiting, int through);
@@ -11,6 +12,7 @@ int main(void){
   double degree[6];
   double* DoT;
   double result;
+
   degree[0] = .33;
   degree[1] = .67;
   degree[2] = 0;
@@ -22,12 +24,14 @@ int main(void){
   {
 	printf( "Degree of truth %d: %lf\n", i, *(DoT + i));
   }
-  result = defuzzify(degree);
+  //result = defuzzify(degree);
+  result = defuzzify(DoT);
   printf("Crisp time is %lf\n", result);
   return 0;
 }
 
-double defuzzify(double dot[6]){
+//double defuzzify(double dot[6]){
+double defuzzify(double* dot){
   int i,k,z=0;
   double statetable[9];
   double crisptime;
@@ -35,7 +39,8 @@ double defuzzify(double dot[6]){
 
   for(i=0;i<3;i++){
     for(k=0;k<3;k++){
-       statetable[z] = min(dot[k],dot[3+i]);
+       //statetable[z] = min(dot[k],dot[3+i]);
+       statetable[z] = min(*(dot + k), *(dot + 3 + i));
        z++;
     }
   }
