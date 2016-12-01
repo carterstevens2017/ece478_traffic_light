@@ -6,7 +6,17 @@ double min(double x, double y);
 double max(double raphael, double michaelangelo, double leonardo, double donatello);
 
 int main(void){
-  
+  double degree[6];
+  double result;
+  degree[0] = .33;
+  degree[1] = .67;
+  degree[2] = 0;
+  degree[3] = .33;
+  degree[4] = .67;
+  degree[5] = 0;
+  result = defuzzify(degree);
+  printf("Crisp time is %lf", result);
+  return 0;
 }
 
 double defuzzify(double dot[6]){
@@ -14,7 +24,7 @@ double defuzzify(double dot[6]){
   double statetable[9];
   double crisptime;
   double finalweights[4];
-  
+
   for(i=0;i<3;i++){
     for(k=0;k<3;k++){
        statetable[z] = min(dot[k],dot[3+i]);
@@ -37,7 +47,7 @@ double min(double x, double y){
 
 double max(double raphael, double michaelangelo, double leonardo, double donatello){
   if((raphael > michaelangelo) && (raphael > leonardo) && (raphael > donatello)) return raphael;
-  if((michaelango > raphael) && (michaelangelo > leonardo) && (michaelangelo > donatello)) return michaelangelo;
+  if((michaelangelo > raphael) && (michaelangelo > leonardo) && (michaelangelo > donatello)) return michaelangelo;
   if((leonardo > raphael) && (leonardo > michaelangelo) && (leonardo > donatello)) return leonardo;
   if((donatello > raphael) && (donatello > michaelangelo) && (donatello > leonardo)) return donatello;
   return 0.0;
