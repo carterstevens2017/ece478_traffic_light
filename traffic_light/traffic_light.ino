@@ -1,6 +1,12 @@
 void setup() {
   // put your setup code here, to run once:
   // Serial.begin(9600);
+  
+  // four mode changes called to ensure that the pins used for the pairs of Red and Green lights are in the proper mode
+  pinMode(0, OUTPUT); // R1
+  pinMode(1, OUTPUT); // G1
+  pinMode(2, OUTPUT); // R2
+  pinMode(3, OUTPUT); // G2
 }
 
 void loop() {
@@ -48,5 +54,42 @@ array[1] = random(100);
 return 1;
 }
 
+void lightChange(double lDelay, int gType) {
+  // function called to take defuzzified time as the first input and a hard 1 or 2 as second input
+  // turns on and off the traffic lights at the determined inputs
+  // gType is 1 for the first set of lights and 2 for the second set
+  // lDelay is the output of the defuzzification
+  // 1/10th of a second delay is added between digitial writes for safety and smoothness, remove or alter if needed.
+  
+  if(gType == 1){
+    // turn off R1 turn on G1
+    digitalWrite(0, LOW);
+    delay(100);
+    digitalWrite(1, HIGH);
 
+    // delay for the time taken as input
+    delay(1000*lDelay); // delay is in ms so *1000
+    
+    // turn off G1 turn on R1
+    digitalWrite(1, LOW);
+    delay(100);
+    digitalWrite(0, HIGH);
+    
+  }
+  else if(gType == 2){
+    // turn off R2 turn on G2
+    digitalWrite(2, LOW);
+    delay(100);
+    digitalWrite(3, HIGH);
+    
+    // delay for the time taken as input
+    delay(1000*lDelay);
+    
+    // turn off G2 turn on R2
+    digitalWrite(3, LOW);
+    delay(100);
+    digitalWrite(2, HIGH);
+    
+  }
+}
 
