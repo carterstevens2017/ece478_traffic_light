@@ -1,18 +1,76 @@
+#define  R1 2
+#define  G1 3
+#define  R2 4
+#define  G2 5
+
 void setup() {
   // put your setup code here, to run once:
-  // Serial.begin(9600);
+  Serial.begin(9600);
+  randomSeed(analogRead(0));
   
-  // four mode changes called to ensure that the pins used for the pairs of Red and Green lights are in the proper mode
-  pinMode(0, OUTPUT); // R1
-  pinMode(1, OUTPUT); // G1
-  pinMode(2, OUTPUT); // R2
-  pinMode(3, OUTPUT); // G2
+  // four mode changes called to ensure that the pins used for the pairs of Red and Green lights are in the proper model
+  pinMode(R1, OUTPUT); // R1
+  pinMode(G1, OUTPUT); // G1
+  pinMode(R2, OUTPUT); // R2
+  pinMode(G2, OUTPUT); // G2
+  digitalWrite(R1, HIGH);
+  digitalWrite(G1, LOW);
+  digitalWrite(R2, HIGH);
+  digitalWrite(G2, LOW);
 }
 
 void loop() {
+  //Serial.print("Hello\n");
+  //delay(1000);
+
+  int *array;
+  double *DoT;
+  double crispTime;
+  //randNumber(array);
+  array[1] = random(100);
+  array[2] = random(100);
+  Serial.print("Random Backup and ThruTraffic integers\n");
+  Serial.print(array[1]);
+  Serial.print(' ');
+  //Serial.println();
+  Serial.print(array[2]);
+  Serial.print("\n\n");
+  DoT = getDoT(array[1], array[2]);
+  //Serial.print("Degrees of Truth:\n");
+  //Serial.print(DoT[0]);
+  //Serial.println();
+  //Serial.print(DoT[1]);
+  //Serial.println();
+  //Serial.print(DoT[2]);
+  //Serial.println();
+  //Serial.print(DoT[3]);
+  //Serial.println();
+  //Serial.print(DoT[4]);
+  //Serial.println();
+  //Serial.print(DoT[5]);
+  //Serial.println();
+  crispTime = defuzzify(DoT);
+  Serial.print("Time to set L1 on: ");
+  Serial.print(crispTime);
+  Serial.print('s');
+  Serial.println("\n\n");
+  lightChange(crispTime, 1);
+  //randNumber(array);
+  array[1] = random(100);
+  array[2] = random(100);
+  DoT = getDoT(array[1], array[2]);
+  Serial.print(array[1]);
+  Serial.print("\n");
+  Serial.print(array[2]);
+  crispTime = defuzzify(DoT);
+   Serial.print("Time to set L2 on: ");
+  Serial.print(crispTime);
+  Serial.print('s');
+  Serial.println("\n\n");
+  lightChange(crispTime, 2);
 }
 
-double defuzzify(double dot[6]){
+double defuzzify(double *dot){
   int i,k,z=0;
   double statetable[9];
   double crisptime;
@@ -47,9 +105,9 @@ double maxval(double raphael, double michaelangelo, double leonardo, double dona
 }
 
 int randNumber(int *array){
-randomSeed(analogRead(0));
-array[0] = random(100);
+//randomSeed(analogRead(0));
 array[1] = random(100);
+array[2] = random(100);
 //return array;
 return 1;
 }
@@ -63,33 +121,108 @@ void lightChange(double lDelay, int gType) {
   
   if(gType == 1){
     // turn off R1 turn on G1
-    digitalWrite(0, LOW);
+    digitalWrite(R1, LOW);
     delay(100);
-    digitalWrite(1, HIGH);
+    digitalWrite(G1, HIGH);
 
     // delay for the time taken as input
     delay(1000*lDelay); // delay is in ms so *1000
     
     // turn off G1 turn on R1
-    digitalWrite(1, LOW);
+    digitalWrite(G1, LOW);
     delay(100);
-    digitalWrite(0, HIGH);
+    digitalWrite(R1, HIGH);
     
   }
   else if(gType == 2){
     // turn off R2 turn on G2
-    digitalWrite(2, LOW);
+    digitalWrite(R2, LOW);
     delay(100);
-    digitalWrite(3, HIGH);
+    digitalWrite(G2, HIGH);
     
     // delay for the time taken as input
     delay(1000*lDelay);
     
     // turn off G2 turn on R2
-    digitalWrite(3, LOW);
+    digitalWrite(G2, LOW);
     delay(100);
-    digitalWrite(2, HIGH);
+    digitalWrite(R2, HIGH);
     
   }
 }
 
+double* getDoT(int waiting, int through)
+{
+  /*Holds degree of truth in following order
+  Few Waiting, Some Waiting, Lots Waiting,
+  Not Busy, Kind of Busy, Very Busy */
+  static double DoT[6];   
+  
+  /*Gets degrees of truth for cars stopped
+    at red light */
+  if(waiting <= 20) 
+  {
+    DoT[0] = 1;
+    DoT[1] = 0;
+    DoT[2] = 0;
+  }
+  else if(waiting > 20 && waiting <= 40)
+  {
+    DoT[0] = (40 - waiting) * .05;
+    DoT[1] = (waiting - 20) * .05;
+    DoT[2] = 0;
+  }
+  else if(waiting > 40 && waiting <= 60)
+  {
+    DoT[0] = 0;
+    DoT[1] = 1;
+    DoT[2] = 0;
+  }
+  else if(waiting > 60 && waiting <= 80)
+  {
+    DoT[0] = 0;
+    DoT[1] = (80 - waiting) * .05;
+    DoT[2] = (waiting - 60) * .05;
+  }
+  else if(waiting > 80)
+  {
+    DoT[0] = 0;
+    DoT[1] = 0;
+    DoT[2] = 1;
+  }
+
+  /*Gets degrees of truth for cars going through
+    gree light */
+  if(through <= 20)
+  {
+    DoT[3] = 1; 
+    DoT[4] = 0;
+    DoT[5] = 0;
+  }
+  if(through > 20 && through <= 40)
+  {
+    DoT[3] = (40 - through) * .05;
+    DoT[4] = (through - 20) * .05;
+    DoT[5] = 0;
+  }
+  if(through > 40 && through <= 60)
+  {
+    DoT[3] = 0;
+    DoT[4] = 1;
+    DoT[5] = 0;
+  }
+  if(through > 60 && through <= 80)
+  {
+    DoT[3] = 0;
+    DoT[4] = (80 - through) * .05;
+    DoT[5] = (through - 60) * .05;    
+  }
+  if(through > 80)
+  {
+    DoT[3] = 0;
+    DoT[4] = 0;
+    DoT[5] = 1;
+  }
+
+  return DoT;
+}

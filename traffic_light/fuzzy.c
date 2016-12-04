@@ -1,6 +1,7 @@
+/*
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+//#include <time.h>
 
 
 //double defuzzify(double degreeoftruth[6]);
@@ -76,13 +77,13 @@ double max(double raphael, double michaelangelo, double leonardo, double donatel
 
 double* getDoT(int waiting, int through)
 {
-	/*Holds degree of truth in following order
+	Holds degree of truth in following order
 	Few Waiting, Some Waiting, Lots Waiting,
-	Not Busy, Kind of Busy, Very Busy */
+	Not Busy, Kind of Busy, Very Busy 
 	static double DoT[6];		
 	
-	/*Gets degrees of truth for cars stopped
-	  at red light */
+	Gets degrees of truth for cars stopped
+	  at red light 
 	if(waiting <= 20) 
 	{
 		DoT[0] = 1;
@@ -114,8 +115,8 @@ double* getDoT(int waiting, int through)
 		DoT[2] = 1;
 	}
 
-	/*Gets degrees of truth for cars going through
-	  gree light */
+	Gets degrees of truth for cars going through
+	  gree light 
 	if(through <= 20)
 	{
 		DoT[3] = 1; 
@@ -149,3 +150,4 @@ double* getDoT(int waiting, int through)
 
 	return DoT;
 }
+*/
