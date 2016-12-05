@@ -121,6 +121,7 @@ void lightChange(double lDelay, int gType) {
   
   if(gType == 1){
     // turn off R1 turn on G1
+    delay(1000);
     digitalWrite(R1, LOW);
     delay(100);
     digitalWrite(G1, HIGH);
@@ -136,6 +137,7 @@ void lightChange(double lDelay, int gType) {
   }
   else if(gType == 2){
     // turn off R2 turn on G2
+    delay(1000);
     digitalWrite(R2, LOW);
     delay(100);
     digitalWrite(G2, HIGH);
